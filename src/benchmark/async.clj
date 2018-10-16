@@ -89,18 +89,18 @@
           (.insertOne (Document. {"name" (str (rand-int 10000))
                                   "_id" (str (+ i id))}) cb)))
     @x
-    (println "------" (pr-str @thread-ids) (count @thread-ids))
     (.countDown cdl)
     (println  (format "id: %s async insert %s times use %s ms" id run-times (- (System/currentTimeMillis) start)))))
 
-(defn async
+(defn -main
   []
   (let [cdl (CountDownLatch. threads)
         barrier (CyclicBarrier. threads)]
     (dotimes [i threads]
-      (future (do
-                (.await barrier)
-                (async-insert (* i run-times) cdl))))
+      (.start
+       (Thread. (fn []
+                  (.await barrier)
+                  (async-insert (* i run-times) cdl)))))
     (.await cdl)
     (drop-all)
     (println "finsh.")))

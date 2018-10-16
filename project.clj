@@ -10,4 +10,7 @@
                  [ring/ring-core "1.7.0"]
                  [ring/ring-jetty-adapter "1.7.0"]]
   :jvm-opts ["-server"]
-  :main benchmark.core)
+  :aliases {"async-server" ["run" "-m" "benchmark.core" "async"]
+            "sync-server" ["run" "-m" "benchmark.core" "sync"]
+            "async" ["run" "-m" "benchmark.async"]
+            "sync" ["run" "-m" "benchmark.sync"]})

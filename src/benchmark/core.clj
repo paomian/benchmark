@@ -5,6 +5,7 @@
 
 (defn -main
   [& params]
+  (println "xxxxxxxxxxx" params)
   (if (= (first params) "async")
     (jetty/go-async)
     (jetty/go-sync)))

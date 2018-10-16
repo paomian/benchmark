@@ -74,14 +74,15 @@
     (.countDown cdl)
     (println  (format "id: %s sync insert %s times user %s ms" id run-times (- (System/currentTimeMillis) start)))))
 
-(defn sync
+(defn -main
   []
   (let [barrier (CyclicBarrier. threads)
         cdl (CountDownLatch. threads)]
     (dotimes [i threads]
-      (future (do
-                (.await barrier)
-                (sync-insert (* i run-times) cdl))))
+      (.start
+       (Thread. (fn []
+                  (.await barrier)
+                  (sync-insert (* i run-times) cdl)))))
     (.await cdl)
     (drop-all)
     (println "finsh.")))
